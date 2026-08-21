@@ -9,6 +9,14 @@ let textNode = Array.from(likeBtn.childNodes). find(
 (node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim() !==
 );
 
+//Zerando o contador inicial
+let count = 0;
+
+// Atializa
+if (textNode){
+textNode.textContent = ` 0`;
+}
+
 
 
 
