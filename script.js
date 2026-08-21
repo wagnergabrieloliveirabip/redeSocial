@@ -6,7 +6,7 @@ const likeSvg =likeBtn.querySelector("svg");
 
 // contador
 let textNode = Array.from(likeBtn.childNodes). find(
-(node) => node.nodeType === Node.TEXT_NODE && node
+(node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim() !==
 );
 
 
