@@ -16,11 +16,14 @@ let count = 0;
 if (textNode){
 textNode.textContent = ` 0`;
 }
-
-
-
-
-
-
-
 })
+
+// coraçao
+finction applyLikedStyle() {
+likeSvg.style.fill = "#e"
+likeSvg.style.stroke =
+likeBtn.style.color =
+
+
+
+}
