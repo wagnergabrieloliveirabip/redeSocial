@@ -1,31 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Busca o botão com a classe 'like-btn' ou pega o primeiro botão dentro de .left-actions
-    const likeBtn = document.querySelector(".like-btn") || document.querySelector(".left-actions .action-btn");
+    // Seleção dos elementos do DOM
+    const likeBtn = document.querySelector(".like-btn");
     const postMedia = document.querySelector(".post-media");
+    const likesCountSpan = document.querySelector(".likes-count");
     const bookmarkBtn = document.querySelector(".bookmark-btn");
 
-    if (!likeBtn) return;
+    if (!likeBtn || !likesCountSpan) return;
 
-    // Busca o span do texto ou cria um tratamento se ele não existir
-    let likesCountSpan = likeBtn.querySelector(".likes-count");
-    
-    // Se o span não existia no HTML, o JS ajusta a estrutura internamente
-    if (!likesCountSpan) {
-        const svg = likeBtn.querySelector("svg");
-        likeBtn.innerHTML = "";
-        if (svg) likeBtn.appendChild(svg);
-        
-        likesCountSpan = document.createElement("span");
-        likesCountSpan.className = "likes-count";
-        likeBtn.appendChild(likesCountSpan);
-    }
-
+    // Estado inicial
     let isLiked = false;
-    let baseLikes = 0; // Sempre inicia zerado (0)
+    let baseLikes = 0; // Sempre inicia zerado
 
-    // Atualiza o texto na tela para 0 na inicialização
+    // Garante exibição inicial em 0
     likesCountSpan.textContent = "0";
 
+    // Formatação visual para números maiores
     function formatLikes(num) {
         if (num >= 1000) {
             return (num / 1000).toFixed(1) + "K";
@@ -33,11 +22,23 @@ document.addEventListener("DOMContentLoaded", () => {
         return num.toString();
     }
 
+    // Atualiza o valor no DOM
     function updateLikesDisplay() {
         likesCountSpan.textContent = formatLikes(baseLikes);
     }
 
-    // Ação ao clicar no Botão de Curtir
+    // Animação do Ícone SVG (Efeito Bounce)
+    function animateIcon(button) {
+        const svg = button.querySelector("svg");
+        if (svg) {
+            svg.style.transform = "scale(1.3)";
+            setTimeout(() => {
+                svg.style.transform = "scale(1)";
+            }, 150);
+        }
+    }
+
+    // Ação ao Clicar no Botão de Curtida (Curte / Descurte)
     likeBtn.addEventListener("click", (e) => {
         e.stopPropagation();
 
@@ -52,53 +53,32 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         updateLikesDisplay();
-
-        // Animação do coração ao clicar
-        const svg = likeBtn.querySelector("svg");
-        if (svg) {
-            svg.style.transform = "scale(1.3)";
-            setTimeout(() => {
-                svg.style.transform = "scale(1)";
-            }, 150);
-        }
+        animateIcon(likeBtn);
     });
 
-    // Ação ao dar duplo clique na Imagem
+    // Ação ao Dar Duplo Clique na Foto (Curte o post)
     if (postMedia) {
         postMedia.addEventListener("dblclick", (e) => {
             e.stopPropagation();
+
             if (!isLiked) {
                 isLiked = true;
                 baseLikes++;
                 likeBtn.classList.add("liked");
                 updateLikesDisplay();
-
-                const svg = likeBtn.querySelector("svg");
-                if (svg) {
-                    svg.style.transform = "scale(1.3)";
-                    setTimeout(() => {
-                        svg.style.transform = "scale(1)";
-                    }, 150);
-                }
+                animateIcon(likeBtn);
             }
         });
     }
 
-    // Botão Salvar (Bookmark)
+    // Ação do Botão de Salvar (Bookmark)
     if (bookmarkBtn) {
         let isBookmarked = false;
         bookmarkBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             isBookmarked = !isBookmarked;
             bookmarkBtn.classList.toggle("bookmarked", isBookmarked);
-
-            const svg = bookmarkBtn.querySelector("svg");
-            if (svg) {
-                svg.style.transform = "scale(1.2)";
-                setTimeout(() => {
-                    svg.style.transform = "scale(1)";
-                }, 150);
-            }
+            animateIcon(bookmarkBtn);
         });
     }
 });
